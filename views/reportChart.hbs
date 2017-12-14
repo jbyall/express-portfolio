@@ -1,0 +1,106 @@
+<div class="container-fluid text-center">
+    <h2>Vehicle Performance Data</h2>
+    <p>{{error}}</p>
+    <p>{{reportId}}</p>
+    <div class="dx-viewport" style="max-width:90%;margin:0 auto;">
+        <div class="demo-container">
+            <div id="chart-demo">
+                <div id="chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#chart").dxChart({
+            dataSource: hwgData,
+            size: { height: 600 },
+            zoomingMode: "all",
+            commonSeriesSettings: {
+                argumentField: "time",
+                type: "spline",
+                point: {
+                    visible: false
+                },
+                spline: {
+                    point: { visible: false }
+                }
+            },
+            commonAxisSettings: {
+                min: 0,
+                synchronizedValue: 0,
+                valueMarginsEnabled: false
+            },
+            //seriesTemplate:{
+            //    nameField: "rpm",
+            //    customizeSeries: function(valueFromRpmField){
+            //        return valueFromRpmField
+            //    }
+            //},
+            argumentAxis: {
+                valueMarginsEnabled: false,
+                //discreteAxisDivisionMode: "crossLabels",
+                grid: {
+                    visible: true
+                },
+                title: { text: "Time(s)" }
+            },
+            valueAxis: [
+                { name: 'axis1', title: { text: "Throttle Position (%)" }, max: 110, tickInterval: 10 },
+                { name: 'axis2', title: { text: "Boost Error (PSI)" }, max: 20, position: "right", tickInterval: 5 }
+            ],
+            crosshair: {
+                enabled: true,
+                color: "#949494",
+                width: 3,
+                dashStyle: "dot",
+                label: {
+                    visible: true,
+                    backgroundColor: "#949494",
+                    font: {
+                        color: "#fff",
+                        size: 12,
+                    }
+                }
+            },
+            series: [
+                { valueField: "throttlePos", name: "Throttle", axis: 'axis1' },
+                { valueField: "tdBoostError", name: "Boost Error", axis: 'axis2' },
+                { valueField: "boost", name: "Boost", axis: 'axis2' },
+                { valueField: "gearPosition", name: "Gear", axis: 'axis2' },
+                //{ valueField: "rpm", name: "rpm", axis:'axis1' },
+            ],
+            legend: {
+                verticalAlignment: "bottom",
+                horizontalAlignment: "center",
+                itemTextPosition: "bottom",
+                equalColumnWidth: true
+            },
+            title: {
+                text: "Data Log Output: 2016 SUBARU WRX MT (USDM)",
+                subtitle: {
+                    text: "Map Info: Stage1 91 v301.ptm"
+                }
+            },
+            export: {
+                enabled: true
+            },
+            tooltip: {
+                enabled: true,
+                customizeTooltip: function () {
+                    return this.valueText;
+                }
+            },
+            onLegendClick: function (e) {
+                var series = e.target;
+                if (series.isVisible()) {
+                    series.hide();
+                }
+                else {
+                    series.show();
+                }
+            }
+        });
+    });
+</script>
